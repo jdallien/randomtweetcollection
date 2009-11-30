@@ -1,15 +1,41 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', '..', 'config', 'boot.rb'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', '..', 'config', 'environment.rb'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'init.rb'))
+require 'activesupport'
 
 describe RandomTweetCollection, "retrieving tweets from Twitter" do
+  class Rails; end
+
+  class FakeRailsCache
+    def initialize
+      @cache = {}
+    end
+
+    def delete(key)
+      @cache.delete(key)
+    end
+
+    def read(key)
+      @cache[key]
+    end
+
+    def write(key, value)
+      @cache[key] = value
+    end
+
+    def fetch(key, &block)
+      unless @cache.has_key?(key)
+        @cache[key] = block.call
+      end
+      @cache[key]
+    end
+  end
+
   before :each do
     @username         = 'TWITTER_USERNAME'
     @twitter4r_client = mock("Twitter4r client")
     Twitter::Client.stub!(:new).and_return(@twitter4r_client)
     @all_tweets       = 200.times.map{ |i| Twitter::Status.new(:id => i) }
     @collection       = RandomTweetCollection.new(@username, 30.minutes)
-    Rails.cache.delete("twitter_timeline_expiry_#{@username}")
-    Rails.cache.delete("twitter_timeline_#{@username}")
+    Rails.stub!(:cache).and_return(FakeRailsCache.new)
   end
 
   it "should load the most recent tweets" do
