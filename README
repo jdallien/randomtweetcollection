@@ -5,12 +5,12 @@ RandomTweetCollection is a Rails plugin by Jeff Dallien (jeff@dallien.net).
 Visit my blog: http://jeff.dallien.net
 Follow me on Twitter: http://twitter.com/discostu
 
-Give visitors to your site a random sampling of your microblogged thoughts with
-a random collection of Twitter status updates, known as tweets. This plugin
-uses the twitter4r gem. Rails.cache is used to store a user's timeline from
-Twitter to avoid taxing the Twitter API limit. Default is to store the updates
-for 15 minutes for at most 4 API calls per hour but the cache time can be
-changed by passing a second parameter when creating the collection.
+Give visitors to your site a random sampling of your tweeted thoughts with
+a random collection of Twitter status updates. This plugin uses the twitter4r
+gem. Rails.cache is used to store a user's timeline from Twitter to avoid
+taxing the Twitter API limit. Default is to store the updates for 15 minutes
+for at most 4 API calls per hour but the cache time can be changed by passing
+a second parameter when creating the collection.
 
 Add the following line to environment.rb:
 
